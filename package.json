@@ -2,7 +2,9 @@
   "name": "openapi-to-graphql-root",
   "private": true,
   "scripts": {
-    "test": "cd packages/openapi-to-graphql/ && npm test"
+    "build": "lerna run build",
+    "lint": "lerna run lint",
+    "test": "lerna run test"
   },
   "devDependencies": {
     "@types/jest": "^24.0.18",

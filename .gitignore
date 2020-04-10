@@ -47,3 +47,7 @@ tmp
 
 # Lock files:
 package-lock.json
+yarn.lock
+
+#Built files:
+lib/
