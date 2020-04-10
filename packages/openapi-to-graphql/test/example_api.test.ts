@@ -607,7 +607,7 @@ test('Get response with cookies', () => {
     expect(result).toEqual({
       data: {
         cookie:
-          'Thanks for your cookie preferences: "cookie_type=chocolate chip; cookie_size=mega-sized; "'
+          'Thanks for your cookie preferences: "cookie_type=chocolate chip; cookie_size=mega-sized;"'
       }
     })
   })

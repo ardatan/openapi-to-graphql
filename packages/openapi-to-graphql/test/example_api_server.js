@@ -481,7 +481,7 @@ function startServer(PORT) {
       res
         .set('Content-Type', 'text/plain')
         .status(200)
-        .send(`Thanks for your cookie preferences: "${req.headers.cookie}"`)
+        .send(`Thanks for your cookie preferences: "${req.headers.cookie.trim()}"`)
     } else {
       res.status(400).send('Need Cookie header parameter')
     }
