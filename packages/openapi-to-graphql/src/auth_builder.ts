@@ -45,7 +45,7 @@ const translationLog = debug('translation')
  * i.e. inside either rootQueryFields/rootMutationFields or inside
  * rootQueryFields/rootMutationFields for further processing
  */
-export function createAndLoadViewer(
+export function createAndLoadViewer (
   queryFields: object,
   data: PreprocessingData,
   isMutation: boolean = false

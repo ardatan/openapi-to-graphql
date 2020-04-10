@@ -60,7 +60,7 @@ const translationLog = debug('translation')
 /**
  * Creates a GraphQL interface from the given OpenAPI Specification (2 or 3).
  */
-export async function createGraphQLSchema(
+export async function createGraphQLSchema (
   spec: Oas3 | Oas2 | (Oas3 | Oas2)[],
   options?: Options
 ): Promise<Result> {
@@ -162,7 +162,7 @@ export async function createGraphQLSchema(
 /**
  * Creates a GraphQL interface from the given OpenAPI Specification 3.0.x
  */
-async function translateOpenAPIToGraphQL(
+async function translateOpenAPIToGraphQL (
   oass: Oas3[],
   {
     strict,
@@ -456,18 +456,18 @@ async function translateOpenAPIToGraphQL(
     query:
       Object.keys(queryFields).length > 0
         ? new GraphQLObjectType({
-            name: 'Query',
-            description: 'The start of any query',
-            fields: queryFields
-          })
+          name: 'Query',
+          description: 'The start of any query',
+          fields: queryFields
+        })
         : GraphQLTools.getEmptyObjectType('Query'), // A GraphQL schema must contain a Query object type
     mutation:
       Object.keys(mutationFields).length > 0
         ? new GraphQLObjectType({
-            name: 'Mutation',
-            description: 'The start of any mutation',
-            fields: mutationFields
-          })
+          name: 'Mutation',
+          description: 'The start of any mutation',
+          fields: mutationFields
+        })
         : null
   }
 
@@ -493,7 +493,7 @@ async function translateOpenAPIToGraphQL(
 /**
  * Creates the field object for the given operation.
  */
-function getFieldForOperation(
+function getFieldForOperation (
   operation: Operation,
   baseUrl: string,
   data: PreprocessingData,
@@ -545,7 +545,7 @@ function getFieldForOperation(
 /**
  * Ensures that the options are valid
  */
-function preliminaryChecks(
+function preliminaryChecks (
   options: InternalOptions,
   data: PreprocessingData
 ): void {

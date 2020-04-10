@@ -45,7 +45,7 @@ type GetResolverParams = {
   requestOptions?: RequestInit
 }
 
-function headersToObject(headers: Headers) {
+function headersToObject (headers: Headers) {
   const headersObj: HeadersInit = {}
   headers.forEach((value, key) => {
     headersObj[key] = value
@@ -66,7 +66,7 @@ interface ResolveData {
  * Creates and returns a resolver function that performs API requests for the
  * given GraphQL query
  */
-export function getResolver({
+export function getResolver ({
   operation,
   argsFromLink = {},
   payloadName,
@@ -579,7 +579,7 @@ export function getResolver({
  * Attempts to create an object to become an OAuth query string by extracting an
  * OAuth token from the ctx based on the JSON path provided in the options.
  */
-function createOAuthQS(
+function createOAuthQS (
   data: PreprocessingData,
   ctx: object
 ): { [key: string]: string } {
@@ -588,7 +588,7 @@ function createOAuthQS(
     : extractToken(data, ctx)
 }
 
-function extractToken(data: PreprocessingData, ctx: object) {
+function extractToken (data: PreprocessingData, ctx: object) {
   const tokenJSONpath = data.options.tokenJSONpath
   const tokens = JSONPath.JSONPath({ path: tokenJSONpath, json: ctx })
   if (Array.isArray(tokens) && tokens.length > 0) {
@@ -608,7 +608,7 @@ function extractToken(data: PreprocessingData, ctx: object) {
  * Attempts to create an OAuth authorization header by extracting an OAuth token
  * from the ctx based on the JSON path provided in the options.
  */
-function createOAuthHeader(
+function createOAuthHeader (
   data: PreprocessingData,
   ctx: object
 ): { [key: string]: string } {
@@ -640,7 +640,7 @@ function createOAuthHeader(
  * which hold headers and query parameters respectively to authentication a
  * request.
  */
-function getAuthOptions(
+function getAuthOptions (
   operation: Operation,
   _openAPIToGraphQL: any,
   data: PreprocessingData
@@ -730,7 +730,7 @@ function getAuthOptions(
  * (possibly multiple) authentication protocols can be used based on the data
  * present in the given context.
  */
-function getAuthReqAndProtcolName(
+function getAuthReqAndProtcolName (
   operation: Operation,
   _openAPIToGraphQL
 ): AuthReqAndProtcolName {
@@ -768,7 +768,7 @@ function getAuthReqAndProtcolName(
  * The link parameter is a reference to data contained in the
  * url/method/statuscode or response/request body/query/path/header
  */
-function resolveLinkParameter(
+function resolveLinkParameter (
   paramName: string,
   value: string,
   resolveData: ResolveData,
@@ -883,7 +883,7 @@ function resolveLinkParameter(
 /**
  * Check if a string is a runtime expression in the context of link parameters
  */
-function isRuntimeExpression(str: string): boolean {
+function isRuntimeExpression (str: string): boolean {
   const references = ['header.', 'query.', 'path.', 'body']
 
   if (str === '$url' || str === '$method' || str === '$statusCode') {
@@ -911,7 +911,7 @@ function isRuntimeExpression(str: string): boolean {
  *
  * Used to store and retrieve the _openAPIToGraphQL of parent field
  */
-function getIdentifier(info): string {
+function getIdentifier (info): string {
   return getIdentifierRecursive(info.path)
 }
 
@@ -919,14 +919,14 @@ function getIdentifier(info): string {
  * From the info object provided by the resolver, get the unique identifier of
  * the parent object
  */
-function getParentIdentifier(info): string {
+function getParentIdentifier (info): string {
   return getIdentifierRecursive(info.path.prev)
 }
 
 /**
  * Get the path of nested field names (or aliases if provided)
  */
-function getIdentifierRecursive(path): string {
+function getIdentifierRecursive (path): string {
   return typeof path.prev === 'undefined'
     ? path.key
     : /**
@@ -943,7 +943,7 @@ function getIdentifierRecursive(path): string {
 /**
  * Create a new GraphQLError with an extensions field
  */
-function graphQLErrorWithExtensions(
+function graphQLErrorWithExtensions (
   message: string,
   extensions: { [key: string]: any }
 ): GraphQLError {

@@ -89,7 +89,7 @@ export const SUCCESS_STATUS_RX = /2[0-9]{2}|2XX/
  * Resolves on a validated OAS 3 for the given spec (OAS 2 or OAS 3), or rejects
  * if errors occur.
  */
-export async function getValidOAS3(
+export async function getValidOAS3 (
   spec: Oas2 | Oas3,
   options: Options
 ): Promise<Oas3> {
@@ -129,7 +129,7 @@ export async function getValidOAS3(
 /**
  * Counts the number of operations in an OAS.
  */
-export function countOperations(oas: Oas3): number {
+export function countOperations (oas: Oas3): number {
   let numOps = 0
   for (let path in oas.paths) {
     for (let method in oas.paths[path]) {
@@ -144,7 +144,7 @@ export function countOperations(oas: Oas3): number {
 /**
  * Counts the number of operations that translate to queries in an OAS.
  */
-export function countOperationsQuery(oas: Oas3): number {
+export function countOperationsQuery (oas: Oas3): number {
   let numOps = 0
   for (let path in oas.paths) {
     for (let method in oas.paths[path]) {
@@ -159,7 +159,7 @@ export function countOperationsQuery(oas: Oas3): number {
 /**
  * Counts the number of operations that translate to mutations in an OAS.
  */
-export function countOperationsMutation(oas: Oas3): number {
+export function countOperationsMutation (oas: Oas3): number {
   let numOps = 0
   for (let path in oas.paths) {
     for (let method in oas.paths[path]) {
@@ -174,7 +174,7 @@ export function countOperationsMutation(oas: Oas3): number {
 /**
  * Counts the number of operations with a payload definition in an OAS.
  */
-export function countOperationsWithPayload(oas: Oas3): number {
+export function countOperationsWithPayload (oas: Oas3): number {
   let numOps = 0
   for (let path in oas.paths) {
     for (let method in oas.paths[path]) {
@@ -192,7 +192,7 @@ export function countOperationsWithPayload(oas: Oas3): number {
 /**
  * Resolves the given reference in the given object.
  */
-export function resolveRef(ref: string, oas: Oas3): any {
+export function resolveRef (ref: string, oas: Oas3): any {
   // Break path into individual tokens
   const parts = ref.split('/')
   const resolvedObject = resolveRefHelper(oas, parts)
@@ -209,7 +209,7 @@ export function resolveRef(ref: string, oas: Oas3): any {
  *
  * @param parts The path to be resolved, but broken into tokens
  */
-function resolveRefHelper(obj: object, parts?: string[]): any {
+function resolveRefHelper (obj: object, parts?: string[]): any {
   if (parts.length === 0) {
     return obj
   }
@@ -227,7 +227,7 @@ function resolveRefHelper(obj: object, parts?: string[]): any {
 /**
  * Returns the base URL to use for the given operation.
  */
-export function getBaseUrl(operation: Operation): string {
+export function getBaseUrl (operation: Operation): string {
   // Check for servers:
   if (!Array.isArray(operation.servers) || operation.servers.length === 0) {
     throw new Error(
@@ -264,7 +264,7 @@ export function getBaseUrl(operation: Operation): string {
 /**
  * Returns the default URL for a given OAS server object.
  */
-function buildUrl(server: ServerObject): string {
+function buildUrl (server: ServerObject): string {
   let url = server.url
 
   // Replace with variable defaults, if applicable
@@ -288,7 +288,7 @@ function buildUrl(server: ServerObject): string {
  * Returns object/array/scalar where all object keys (if applicable) are
  * sanitized.
  */
-export function sanitizeObjectKeys(
+export function sanitizeObjectKeys (
   obj: any, // obj does not necessarily need to be an object
   caseStyle: CaseStyle = CaseStyle.camelCase
 ): any {
@@ -328,7 +328,7 @@ export function sanitizeObjectKeys(
  * Desanitizes keys in given object by replacing them with the keys stored in
  * the given mapping.
  */
-export function desanitizeObjectKeys(
+export function desanitizeObjectKeys (
   obj: object | Array<any>,
   mapping: object = {}
 ): object | Array<any> {
@@ -361,7 +361,7 @@ export function desanitizeObjectKeys(
  * Replaces the path parameter in the given path with values in the given args.
  * Furthermore adds the query parameters for a request.
  */
-export function instantiatePathAndGetQuery(
+export function instantiatePathAndGetQuery (
   path: string,
   parameters: ParameterObject[],
   args: object, // NOTE: argument keys are sanitized!
@@ -433,7 +433,7 @@ export function instantiatePathAndGetQuery(
  *
  * Does not consider allOf, anyOf, oneOf, or not (handled separately)
  */
-export function getSchemaTargetGraphQLType(
+export function getSchemaTargetGraphQLType (
   schema: SchemaObject,
   data: PreprocessingData
 ): string | null {
@@ -492,7 +492,7 @@ export function getSchemaTargetGraphQLType(
  * components as well as an updated list of paths where the common prefix was
  * removed.
  */
-function extractBasePath(
+function extractBasePath (
   paths: string[]
 ): {
   basePath: string
@@ -542,11 +542,11 @@ function extractBasePath(
   }
 }
 
-function isIdParam(part) {
+function isIdParam (part) {
   return /^{.*(id|name|key).*}$/gi.test(part)
 }
 
-function isSingularParam(part, nextPart) {
+function isSingularParam (part, nextPart) {
   return `\{${pluralize.singular(part)}\}` === nextPart
 }
 
@@ -555,7 +555,7 @@ function isSingularParam(part, nextPart) {
  *
  * For example, turns "/users/{userId}/car" into "userCar".
  */
-export function inferResourceNameFromPath(path: string): string {
+export function inferResourceNameFromPath (path: string): string {
   const parts = path.split('/')
   let pathNoPathParams = parts.reduce((path, part, i) => {
     if (!/{/g.test(part)) {
@@ -579,7 +579,7 @@ export function inferResourceNameFromPath(path: string): string {
  * Returns JSON-compatible schema required by the given endpoint - or null if it
  * does not exist.
  */
-export function getRequestBodyObject(
+export function getRequestBodyObject (
   endpoint: OperationObject,
   oas: Oas3
 ): { payloadContentType: string; requestBodyObject: RequestBodyObject } | null {
@@ -632,7 +632,7 @@ export function getRequestBodyObject(
  * a dictionary of names from different sources (if available), and whether the
  * request schema is required for the endpoint.
  */
-export function getRequestSchemaAndNames(
+export function getRequestSchemaAndNames (
   path: string,
   method: string,
   oas: Oas3
@@ -717,7 +717,7 @@ export function getRequestSchemaAndNames(
  * Returns JSON-compatible schema produced by the given endpoint - or null if it
  * does not exist.
  */
-export function getResponseObject(
+export function getResponseObject (
   endpoint: OperationObject,
   statusCode: string,
   oas: Oas3
@@ -770,7 +770,7 @@ export function getResponseObject(
  * the given status code, and a dictionary of names from different sources (if
  * available).
  */
-export function getResponseSchemaAndNames(
+export function getResponseSchemaAndNames (
   path: string,
   method: string,
   oas: Oas3,
@@ -859,7 +859,7 @@ export function getResponseSchemaAndNames(
  * Returns the success status code for the operation at the given path and
  * method (or null).
  */
-export function getResponseStatusCode(
+export function getResponseStatusCode (
   path: string,
   method: string,
   oas: Oas3,
@@ -900,7 +900,7 @@ export function getResponseStatusCode(
 /**
  * Returns an hash containing the links defined in the given endpoint.
  */
-export function getEndpointLinks(
+export function getEndpointLinks (
   path: string,
   method: string,
   oas: Oas3,
@@ -950,7 +950,7 @@ export function getEndpointLinks(
  * Returns the list of parameters for the endpoint at the given method and path.
  * Resolves possible references.
  */
-export function getParameters(
+export function getParameters (
   path: string,
   method: string,
   oas: Oas3
@@ -1008,7 +1008,7 @@ export function getParameters(
  * definitions at the path item, definitions at the operation, or the OAS
  * default.
  */
-export function getServers(
+export function getServers (
   path: string,
   method: string,
   oas: Oas3
@@ -1046,7 +1046,7 @@ export function getServers(
  * Returns a map of Security Scheme definitions, identified by keys. Resolves
  * possible references.
  */
-export function getSecuritySchemes(
+export function getSecuritySchemes (
   oas: Oas3
 ): { [key: string]: SecuritySchemeObject } {
   // Collect all security schemes:
@@ -1078,7 +1078,7 @@ export function getSecuritySchemes(
  * Returns the list of sanitized keys of non-OAuth2 security schemes
  * required by the operation at the given path and method.
  */
-export function getSecurityRequirements(
+export function getSecurityRequirements (
   path: string,
   method: string,
   securitySchemes: { [key: string]: ProcessedSecurityScheme },
@@ -1133,7 +1133,7 @@ export enum CaseStyle {
 /**
  * First sanitizes given string and then also camel-cases it.
  */
-export function sanitize(str: string, caseStyle: CaseStyle): string {
+export function sanitize (str: string, caseStyle: CaseStyle): string {
   /**
    * Used in conjunction to simpleNames, which only removes illegal
    * characters and preserves casing
@@ -1185,7 +1185,7 @@ export function sanitize(str: string, caseStyle: CaseStyle): string {
  * Sanitizes the given string and stores the sanitized-to-original mapping in
  * the given mapping.
  */
-export function storeSaneName(
+export function storeSaneName (
   saneStr: string,
   str: string,
   mapping: { [key: string]: string }
@@ -1205,7 +1205,7 @@ export function storeSaneName(
 /**
  * Stringifies and possibly trims the given string to the provided length.
  */
-export function trim(str: string, length: number): string {
+export function trim (str: string, length: number): string {
   if (typeof str !== 'string') {
     str = JSON.stringify(str)
   }
@@ -1221,7 +1221,7 @@ export function trim(str: string, length: number): string {
  * Determines if the given "method" is indeed an operation. Alternatively, the
  * method could point to other types of information (e.g., parameters, servers).
  */
-export function isOperation(method: string): boolean {
+export function isOperation (method: string): boolean {
   return OAS_OPERATIONS.includes(method.toLowerCase())
 }
 
@@ -1231,7 +1231,7 @@ export function isOperation(method: string): boolean {
  *
  * Also used in preprocessing.ts where Operation objects are being constructed
  */
-export function formatOperationString(
+export function formatOperationString (
   method: string,
   path: string,
   title?: string
@@ -1246,20 +1246,20 @@ export function formatOperationString(
 /**
  * Capitalizes a given string
  */
-export function capitalize(str: string): string {
+export function capitalize (str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1)
 }
 
 /**
  * Uncapitalizes a given string
  */
-export function uncapitalize(str: string): string {
+export function uncapitalize (str: string): string {
   return str.charAt(0).toLowerCase() + str.slice(1)
 }
 
 /**
  * For operations that do not have an operationId, generate one
  */
-export function generateOperationId(method: string, path: string): string {
+export function generateOperationId (method: string, path: string): string {
   return sanitize(`${method} ${path}`, CaseStyle.camelCase)
 }

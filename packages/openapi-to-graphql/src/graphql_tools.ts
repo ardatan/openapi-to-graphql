@@ -18,7 +18,7 @@ import {
 /**
  * Returns empty GraphQLObjectType.
  */
-export function getEmptyObjectType(name: string): GQObjectType {
+export function getEmptyObjectType (name: string): GQObjectType {
   return new GraphQLObjectType({
     name: name + 'Placeholder',
     description: 'Placeholder object',

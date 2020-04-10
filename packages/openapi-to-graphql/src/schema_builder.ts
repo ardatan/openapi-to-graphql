@@ -84,7 +84,7 @@ const translationLog = debug('translation')
 /**
  * Creates and returns a GraphQL type for the given JSON schema.
  */
-export function getGraphQLType({
+export function getGraphQLType ({
   def,
   operation,
   data,
@@ -161,7 +161,7 @@ export function getGraphQLType({
  *       resolve   // Optional function defining how to obtain this type
  *   })
  */
-function createOrReuseOt({
+function createOrReuseOt ({
   def,
   operation,
   data,
@@ -268,7 +268,7 @@ function createOrReuseOt({
 /**
  * Creates a union type or return an existing one, and stores it in data
  */
-function createOrReuseUnion({
+function createOrReuseUnion ({
   def,
   operation,
   data,
@@ -369,7 +369,7 @@ function createOrReuseUnion({
  *
  * i.e. member types that can be confused with each other.
  */
-function checkAmbiguousMemberTypes(
+function checkAmbiguousMemberTypes (
   def: DataDefinition,
   types: GraphQLObjectType[],
   data: PreprocessingData
@@ -419,7 +419,7 @@ function checkAmbiguousMemberTypes(
 /**
  * Creates a list type or returns an existing one, and stores it in data
  */
-function createOrReuseList({
+function createOrReuseList ({
   def,
   operation,
   iteration,
@@ -485,7 +485,7 @@ function createOrReuseList({
 /**
  * Creates an enum type or returns an existing one, and stores it in data
  */
-function createOrReuseEnum({
+function createOrReuseEnum ({
   def,
   data
 }: CreateOrReuseSimpleTypeParams): GraphQLEnumType {
@@ -521,7 +521,7 @@ function createOrReuseEnum({
 /**
  * Returns the GraphQL scalar type matching the given JSON schema type
  */
-function getScalarType({
+function getScalarType ({
   def,
   data
 }: CreateOrReuseSimpleTypeParams): GraphQLScalarType {
@@ -554,7 +554,7 @@ function getScalarType({
 /**
  * Creates the fields object to be used by an (input) object type
  */
-function createFields({
+function createFields ({
   def,
   links,
   operation,
@@ -693,12 +693,12 @@ function createFields({
             linkedOp.responseDefinition.graphQLType !== undefined
               ? linkedOp.responseDefinition.graphQLType
               : getGraphQLType({
-                  def: linkedOp.responseDefinition,
-                  operation,
-                  data,
-                  iteration: iteration + 1,
-                  isInputObjectType: false
-                })
+                def: linkedOp.responseDefinition,
+                operation,
+                data,
+                iteration: iteration + 1,
+                isInputObjectType: false
+              })
 
           let description = link.description
 
@@ -739,7 +739,7 @@ function createFields({
  *  Any changes to constructing operationIds in preprocessor.js should be
  *  reflected here.
  */
-function linkOpRefToOpId({
+function linkOpRefToOpId ({
   links,
   linkKey,
   operation,
@@ -983,7 +983,7 @@ function linkOpRefToOpId({
 /**
  * Creates the arguments for resolving a field
  */
-export function getArgs({
+export function getArgs ({
   requestPayloadDef,
   parameters,
   operation,
@@ -1211,7 +1211,7 @@ export function getArgs({
  *
  * For example, name reference, file path, web-hosted OAS link, etc.
  */
-function getLinkLocationType(linkLocation: string): string {
+function getLinkLocationType (linkLocation: string): string {
   // TODO: currently we only support the title as a link location
   return 'title'
 }
@@ -1220,7 +1220,7 @@ function getLinkLocationType(linkLocation: string): string {
  * Used in the context of links, specifically those using an external operationRef
  * Based on the location of the OAS, retrieve said OAS
  */
-function getOasFromLinkLocation(
+function getOasFromLinkLocation (
   linkLocation: string,
   link: LinkObject,
   data: PreprocessingData

@@ -25,7 +25,7 @@ const preprocessingLog = debug('preprocessing')
  * Extract information from the OAS and put it inside a data structure that
  * is easier for OpenAPI-to-GraphQL to use
  */
-export function preprocessOas(
+export function preprocessOas (
   oass: Oas3[],
   options: InternalOptions
 ): PreprocessingData {
@@ -285,7 +285,7 @@ export function preprocessOas(
  *   }
  * }
  */
-function getProcessedSecuritySchemes(
+function getProcessedSecuritySchemes (
   oas: Oas3,
   data: PreprocessingData
 ): { [key: string]: ProcessedSecurityScheme } {
@@ -432,7 +432,7 @@ function getProcessedSecuritySchemes(
  *
  * Either names or preferredName should exist.
  */
-export function createDataDef(
+export function createDataDef (
   names: Oas3Tools.SchemaNames,
   schema: SchemaObject,
   isInputObjectType: boolean,
@@ -737,7 +737,7 @@ export function createDataDef(
  * contains the same schema and preferred name as the given one. Returns -1 if
  * that schema could not be found.
  */
-function getSchemaIndex(
+function getSchemaIndex (
   preferredName: string,
   schema: SchemaObject,
   dataDefs: DataDefinition[]
@@ -770,7 +770,7 @@ function getSchemaIndex(
  * Similar to getSchemaName() except it does not check if the name has already
  * been taken.
  */
-function getPreferredName(names: Oas3Tools.SchemaNames): string {
+function getPreferredName (names: Oas3Tools.SchemaNames): string {
   if (typeof names.preferred === 'string') {
     return Oas3Tools.sanitize(names.preferred, Oas3Tools.CaseStyle.PascalCase) // CASE: preferred name already known
   } else if (typeof names.fromRef === 'string') {
@@ -788,7 +788,7 @@ function getPreferredName(names: Oas3Tools.SchemaNames): string {
  * Determines name to use for schema from previously determined schemaNames and
  * considering not reusing existing names.
  */
-function getSchemaName(
+function getSchemaName (
   names: Oas3Tools.SchemaNames,
   usedNames: string[]
 ): string {
@@ -867,7 +867,7 @@ function getSchemaName(
 /**
  * Add the properties to the data definition
  */
-function addObjectPropertiesToDataDef(
+function addObjectPropertiesToDataDef (
   def: DataDefinition,
   schema: SchemaObject,
   required: string[],
@@ -931,7 +931,7 @@ function addObjectPropertiesToDataDef(
  * Recursively traverse a schema and resolve allOf by appending the data to the
  * parent schema
  */
-function resolveAllOf(
+function resolveAllOf (
   schema: SchemaObject | ReferenceObject,
   references: { [reference: string]: SchemaObject },
   data: PreprocessingData,
@@ -1053,7 +1053,7 @@ type MemberSchemaData = {
  * In the context of schemas that use keywords that combine member schemas,
  * collect data on certain aspects so it is all in one place for processing.
  */
-function getMemberSchemaData(
+function getMemberSchemaData (
   schemas: (SchemaObject | ReferenceObject)[],
   data: PreprocessingData,
   oas: Oas3
@@ -1098,7 +1098,7 @@ function getMemberSchemaData(
  *
  * We currently cannot handle complex cases of oneOf and anyOf
  */
-function hasNestedOneOfUsage(
+function hasNestedOneOfUsage (
   collapsedSchema: SchemaObject,
   oas: Oas3
 ): boolean {
@@ -1126,7 +1126,7 @@ function hasNestedOneOfUsage(
  *
  * We currently cannot handle complex cases of oneOf and anyOf
  */
-function hasNestedAnyOfUsage(
+function hasNestedAnyOfUsage (
   collapsedSchema: SchemaObject,
   oas: Oas3
 ): boolean {
@@ -1155,7 +1155,7 @@ function hasNestedAnyOfUsage(
  * anyOf should resolve into an object that contains the superset of all
  * properties from the member schemas
  */
-function createDataDefFromAnyOf(
+function createDataDefFromAnyOf (
   saneName: string,
   saneInputName: string,
   collapsedSchema: SchemaObject,
@@ -1320,7 +1320,7 @@ function createDataDefFromAnyOf(
   }
 }
 
-function createDataDefFromOneOf(
+function createDataDefFromOneOf (
   saneName: string,
   saneInputName: string,
   collapsedSchema: SchemaObject,

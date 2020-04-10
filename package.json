@@ -20,5 +20,8 @@
   "contributors": [
     "Alan Cha",
     "Erik Wittern"
+  ],
+  "workspaces": [
+    "packages/*"
   ]
 }

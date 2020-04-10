@@ -53,7 +53,7 @@ export const mitigations = {
 /**
  * Utilities that are specific to OpenAPI-to-GraphQL
  */
-export function handleWarning({
+export function handleWarning ({
   typeKey,
   message,
   mitigationAddendum,
@@ -97,7 +97,7 @@ export function handleWarning({
 
 // Code provided by codename- from StackOverflow
 // Link: https://stackoverflow.com/a/29622653
-export function sortObject(o) {
+export function sortObject (o) {
   return Object.keys(o)
     .sort()
     .reduce((r, k) => ((r[k] = o[k]), r), {})
@@ -106,7 +106,7 @@ export function sortObject(o) {
 /**
  * Finds the common property names between two objects
  */
-export function getCommonPropertyNames(object1, object2): string[] {
+export function getCommonPropertyNames (object1, object2): string[] {
   return Object.keys(object1).filter(propertyName => {
     return propertyName in object2
   })
