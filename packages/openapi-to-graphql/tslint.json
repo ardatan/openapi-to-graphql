@@ -1,3 +1,14 @@
 {
-  "extends": "tslint-config-standard"
+  "extends": "tslint-config-standard",
+  "rules": {
+    "jsdoc-format": {
+      "severity": "off"
+    },
+    "radix": {
+      "severity": "off"
+    },
+    "strict-type-predicates": {
+      "severity": "off"
+    }
+  }
 }

@@ -4,7 +4,6 @@
 // License text available at https://opensource.org/licenses/MIT
 
 // Type imports:
-import * as NodeRequest from 'request'
 import { ResolveFunction, GraphQLOperationType } from './graphql'
 
 /**
@@ -134,7 +133,7 @@ export type Options = {
    * calls to the API backend.
    * e.g. Setup the web proxy to use.
    */
-  requestOptions?: NodeRequest.OptionsWithUrl
+  requestOptions?: RequestInit
 
   /**
    * Specifies the URL on which all paths will be based on.
@@ -204,6 +203,16 @@ export type Options = {
    * Will forgo the title is only one OAS is provided
    */
   equivalentToMessages?: boolean
+
+  /**
+   * Skips OAS Validation
+   */
+  skipSchemaValidation?: boolean
+
+  /**
+   * Custom fetch implementation
+   */
+  fetch?: typeof import('cross-fetch').fetch
 }
 
 export type InternalOptions = {
@@ -319,7 +328,7 @@ export type InternalOptions = {
    * calls to the API backend.
    * e.g. Setup the web proxy to use.
    */
-  requestOptions?: NodeRequest.OptionsWithUrl
+  requestOptions?: RequestInit
 
   /**
    * Specifies the URL on which all paths will be based on.
@@ -389,6 +398,11 @@ export type InternalOptions = {
    * Will forgo the title is only one OAS is provided
    */
   equivalentToMessages: boolean
+
+  /**
+   * Custom fetch implementation
+   */
+  fetch: typeof import('cross-fetch').fetch
 }
 
 export type selectQueryOrMutationFieldType = {

@@ -1,7 +1,6 @@
 import { Operation } from './types/operation';
 import { ResolveFunction } from './types/graphql';
 import { PreprocessingData } from './types/preprocessing_data';
-import * as NodeRequest from 'request';
 declare type GetResolverParams = {
     operation: Operation;
     argsFromLink?: {
@@ -10,7 +9,7 @@ declare type GetResolverParams = {
     payloadName?: string;
     data: PreprocessingData;
     baseUrl?: string;
-    requestOptions?: NodeRequest.OptionsWithUrl;
+    requestOptions?: RequestInit;
 };
 /**
  * Creates and returns a resolver function that performs API requests for the

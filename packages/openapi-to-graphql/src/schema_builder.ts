@@ -477,7 +477,7 @@ function createOrReuseList({
     }
     return listObjectType
   } else {
-    throw new Error(`Cannot create list item object type '${itemsName}' in list 
+    throw new Error(`Cannot create list item object type '${itemsName}' in list
     '${name}' with schema '${JSON.stringify(itemsSchema)}'`)
   }
 }
@@ -1034,15 +1034,6 @@ export function getArgs({
           if (
             typeof data.options.qs === 'object' &&
             parameter.name in data.options.qs
-          ) {
-            continue
-          }
-
-          // Check requestOptions option
-          if (
-            typeof data.options.requestOptions === 'object' &&
-            typeof data.options.requestOptions.qs === 'object' &&
-            parameter.name in data.options.requestOptions.qs
           ) {
             continue
           }

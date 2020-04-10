@@ -8,7 +8,6 @@
     "lib": ["es2017"],
     "declaration": true
   },
-  "files": ["./node_modules/@types/node/index.d.ts"],
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }

@@ -70,6 +70,10 @@ function createGraphQLSchema(spec, options) {
             typeof options.equivalentToMessages === 'boolean'
                 ? options.equivalentToMessages
                 : true;
+        options.fetch =
+            typeof options.fetch === 'function'
+                ? options.fetch
+                : yield Promise.resolve().then(() => require('cross-fetch')).then(m => m.fetch);
         options['report'] = {
             warnings: [],
             numOps: 0,
@@ -78,13 +82,17 @@ function createGraphQLSchema(spec, options) {
             numQueriesCreated: 0,
             numMutationsCreated: 0
         };
+        options.skipSchemaValidation =
+            typeof options.skipSchemaValidation === 'boolean'
+                ? options.skipSchemaValidation
+                : false;
         let oass;
         if (Array.isArray(spec)) {
             /**
              * Convert all non-OAS 3.0.x into OAS 3.0.x
              */
             oass = yield Promise.all(spec.map(ele => {
-                return Oas3Tools.getValidOAS3(ele);
+                return Oas3Tools.getValidOAS3(ele, options);
             }));
         }
         else {
@@ -93,7 +101,7 @@ function createGraphQLSchema(spec, options) {
              * If the spec is OAS 2.0, attempt to translate it into 3.0.x, then try to
              * translate the spec into a GraphQL schema
              */
-            oass = [yield Oas3Tools.getValidOAS3(spec)];
+            oass = [yield Oas3Tools.getValidOAS3(spec, options)];
         }
         const { schema, report } = yield translateOpenAPIToGraphQL(oass, options);
         return {
@@ -114,7 +122,7 @@ headers, qs, requestOptions, baseUrl, customResolvers,
 // Authentication options
 viewer, tokenJSONpath, sendOAuthTokenInQuery, 
 // Logging options
-provideErrorExtensions, equivalentToMessages }) {
+provideErrorExtensions, equivalentToMessages, fetch }) {
     return __awaiter(this, void 0, void 0, function* () {
         const options = {
             strict,
@@ -140,7 +148,8 @@ provideErrorExtensions, equivalentToMessages }) {
             sendOAuthTokenInQuery,
             // Logging options
             provideErrorExtensions,
-            equivalentToMessages
+            equivalentToMessages,
+            fetch
         };
         translationLog(`Options: ${JSON.stringify(options)}`);
         /**

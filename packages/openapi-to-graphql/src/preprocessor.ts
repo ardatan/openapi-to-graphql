@@ -557,7 +557,7 @@ export function createDataDef(
       const collapsedSchema = resolveAllOf(schema, {}, data, oas)
 
       const targetGraphQLType = Oas3Tools.getSchemaTargetGraphQLType(
-        collapsedSchema as SchemaObject,
+        collapsedSchema,
         data
       )
 
@@ -1045,7 +1045,7 @@ function resolveAllOf(
 
 type MemberSchemaData = {
   allTargetGraphQLTypes: string[]
-  allProperties: ({ [key: string]: SchemaObject | ReferenceObject })[]
+  allProperties: { [key: string]: SchemaObject | ReferenceObject }[]
   allRequired: string[]
 }
 
@@ -1207,11 +1207,11 @@ function createDataDefFromAnyOf(
           Object.keys(properties).forEach(propertyName => {
             if (
               !incompatibleProperties.has(propertyName) && // Has not been already identified as a problematic property
-              (typeof allProperties[propertyName] === 'object' &&
+              typeof allProperties[propertyName] === 'object' &&
                 allProperties[propertyName].some(property => {
                   // Property does not match a recorded one
                   return !deepEqual(property, properties[propertyName])
-                }))
+                })
             ) {
               incompatibleProperties.add(propertyName)
             }

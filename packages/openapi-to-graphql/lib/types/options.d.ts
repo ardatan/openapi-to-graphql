@@ -1,4 +1,3 @@
-import * as NodeRequest from 'request';
 import { ResolveFunction, GraphQLOperationType } from './graphql';
 /**
  * Type definition of the options that users can pass to OpenAPI-to-GraphQL.
@@ -114,7 +113,7 @@ export declare type Options = {
      * calls to the API backend.
      * e.g. Setup the web proxy to use.
      */
-    requestOptions?: NodeRequest.OptionsWithUrl;
+    requestOptions?: RequestInit;
     /**
      * Specifies the URL on which all paths will be based on.
      * Overrides the server object in the OAS.
@@ -177,6 +176,14 @@ export declare type Options = {
      * Will forgo the title is only one OAS is provided
      */
     equivalentToMessages?: boolean;
+    /**
+     * Skips OAS Validation
+     */
+    skipSchemaValidation?: boolean;
+    /**
+     * Custom fetch implementation
+     */
+    fetch?: typeof import('cross-fetch').fetch;
 };
 export declare type InternalOptions = {
     /**
@@ -279,7 +286,7 @@ export declare type InternalOptions = {
      * calls to the API backend.
      * e.g. Setup the web proxy to use.
      */
-    requestOptions?: NodeRequest.OptionsWithUrl;
+    requestOptions?: RequestInit;
     /**
      * Specifies the URL on which all paths will be based on.
      * Overrides the server object in the OAS.
@@ -342,6 +349,10 @@ export declare type InternalOptions = {
      * Will forgo the title is only one OAS is provided
      */
     equivalentToMessages: boolean;
+    /**
+     * Custom fetch implementation
+     */
+    fetch: typeof import('cross-fetch').fetch;
 };
 export declare type selectQueryOrMutationFieldType = {
     [title: string]: {

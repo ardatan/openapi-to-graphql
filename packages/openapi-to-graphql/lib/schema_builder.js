@@ -317,7 +317,7 @@ function createOrReuseList({ def, operation, iteration, isInputObjectType, data 
         return listObjectType;
     }
     else {
-        throw new Error(`Cannot create list item object type '${itemsName}' in list 
+        throw new Error(`Cannot create list item object type '${itemsName}' in list
     '${name}' with schema '${JSON.stringify(itemsSchema)}'`);
     }
 }
@@ -473,7 +473,7 @@ function createFields({ def, links, operation, data, iteration, isInputObjectTyp
                         argsFromLink: argsFromLink,
                         data,
                         baseUrl: data.options.baseUrl,
-                        requestOptions: data.options.requestOptions
+                        requestOptions: data.options.requestOptions,
                     });
                     // Get arguments for link
                     const args = getArgs({
@@ -764,12 +764,6 @@ function getArgs({ requestPayloadDef, parameters, operation, data }) {
                     // Check header option
                     if (typeof data.options.qs === 'object' &&
                         parameter.name in data.options.qs) {
-                        continue;
-                    }
-                    // Check requestOptions option
-                    if (typeof data.options.requestOptions === 'object' &&
-                        typeof data.options.requestOptions.qs === 'object' &&
-                        parameter.name in data.options.requestOptions.qs) {
                         continue;
                     }
                     break;

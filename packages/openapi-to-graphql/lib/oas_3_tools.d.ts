@@ -5,7 +5,7 @@ import { Oas2 } from './types/oas2';
 import { Operation } from './types/operation';
 import { Oas3, ServerObject, ParameterObject, SchemaObject, OperationObject, ResponseObject, RequestBodyObject, ReferenceObject, LinkObject, SecuritySchemeObject } from './types/oas3';
 import { PreprocessingData, ProcessedSecurityScheme } from './types/preprocessing_data';
-import { InternalOptions } from './types/options';
+import { InternalOptions, Options } from './types/options';
 export declare type SchemaNames = {
     fromRef?: string;
     fromSchema?: string;
@@ -34,7 +34,7 @@ export declare const SUCCESS_STATUS_RX: RegExp;
  * Resolves on a validated OAS 3 for the given spec (OAS 2 or OAS 3), or rejects
  * if errors occur.
  */
-export declare function getValidOAS3(spec: Oas2 | Oas3): Promise<Oas3>;
+export declare function getValidOAS3(spec: Oas2 | Oas3, options: Options): Promise<Oas3>;
 /**
  * Counts the number of operations in an OAS.
  */

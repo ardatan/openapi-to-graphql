@@ -14,8 +14,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 // Imports:
-const Swagger2OpenAPI = require("swagger2openapi");
-const OASValidator = require("oas-validator");
+const swagger2openapi_1 = require("swagger2openapi");
+const oas_validator_1 = require("oas-validator");
 const debug_1 = require("debug");
 const utils_1 = require("./utils");
 const pluralize = require("pluralize");
@@ -37,24 +37,26 @@ exports.SUCCESS_STATUS_RX = /2[0-9]{2}|2XX/;
  * Resolves on a validated OAS 3 for the given spec (OAS 2 or OAS 3), or rejects
  * if errors occur.
  */
-function getValidOAS3(spec) {
+function getValidOAS3(spec, options) {
     return __awaiter(this, void 0, void 0, function* () {
         // CASE: translate
         if (typeof spec.swagger === 'string' &&
             spec.swagger === '2.0') {
             preprocessingLog(`Received OpenAPI Specification 2.0 - going to translate...`);
-            const result = yield Swagger2OpenAPI.convertObj(spec, {});
+            const result = yield swagger2openapi_1.convertObj(spec, {});
             return result.openapi;
             // CASE: validate
         }
         else if (typeof spec.openapi === 'string' &&
             /^3/.test(spec.openapi)) {
-            preprocessingLog(`Received OpenAPI Specification 3.0.x - going to validate...`);
-            const valid = OASValidator.validateSync(spec, {});
-            if (!valid) {
-                throw new Error(`Validation of OpenAPI Specification failed.`);
+            if (!options.skipSchemaValidation) {
+                preprocessingLog(`Received OpenAPI Specification 3.0.x - going to validate...`);
+                const valid = yield oas_validator_1.validate(spec, {});
+                if (!valid) {
+                    throw new Error(`Validation of OpenAPI Specification failed.`);
+                }
+                preprocessingLog(`OpenAPI Specification is validated`);
             }
-            preprocessingLog(`OpenAPI Specification is validated`);
             return spec;
         }
         else {

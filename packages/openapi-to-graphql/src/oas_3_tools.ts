@@ -31,11 +31,11 @@ import {
   PreprocessingData,
   ProcessedSecurityScheme
 } from './types/preprocessing_data'
-import { InternalOptions } from './types/options'
+import { InternalOptions, Options } from './types/options'
 
 // Imports:
-import * as Swagger2OpenAPI from 'swagger2openapi'
-import * as OASValidator from 'oas-validator'
+import { convertObj as convertSwaggerObjToOpenAPI } from 'swagger2openapi'
+import { validate as oasValidate } from 'oas-validator'
 import debug from 'debug'
 import { handleWarning } from './utils'
 import * as pluralize from 'pluralize'
@@ -89,7 +89,10 @@ export const SUCCESS_STATUS_RX = /2[0-9]{2}|2XX/
  * Resolves on a validated OAS 3 for the given spec (OAS 2 or OAS 3), or rejects
  * if errors occur.
  */
-export async function getValidOAS3(spec: Oas2 | Oas3): Promise<Oas3> {
+export async function getValidOAS3(
+  spec: Oas2 | Oas3,
+  options: Options
+): Promise<Oas3> {
   // CASE: translate
   if (
     typeof (spec as Oas2).swagger === 'string' &&
@@ -98,23 +101,24 @@ export async function getValidOAS3(spec: Oas2 | Oas3): Promise<Oas3> {
     preprocessingLog(
       `Received OpenAPI Specification 2.0 - going to translate...`
     )
-    const result: { openapi: Oas3 } = await Swagger2OpenAPI.convertObj(spec, {})
-    return result.openapi as Oas3
+    const result: { openapi: Oas3 } = await convertSwaggerObjToOpenAPI(spec, {})
+    return result.openapi
 
     // CASE: validate
   } else if (
     typeof (spec as Oas3).openapi === 'string' &&
     /^3/.test((spec as Oas3).openapi)
   ) {
-    preprocessingLog(
-      `Received OpenAPI Specification 3.0.x - going to validate...`
-    )
-    const valid = OASValidator.validateSync(spec, {})
-    if (!valid) {
-      throw new Error(`Validation of OpenAPI Specification failed.`)
+    if (!options.skipSchemaValidation) {
+      preprocessingLog(
+        `Received OpenAPI Specification 3.0.x - going to validate...`
+      )
+      const valid = await oasValidate(spec, {})
+      if (!valid) {
+        throw new Error(`Validation of OpenAPI Specification failed.`)
+      }
+      preprocessingLog(`OpenAPI Specification is validated`)
     }
-
-    preprocessingLog(`OpenAPI Specification is validated`)
 
     return spec as Oas3
   } else {

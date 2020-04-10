@@ -38,7 +38,6 @@ import { Args, Field } from './types/graphql'
 import { Operation } from './types/operation'
 import { PreprocessingData } from './types/preprocessing_data'
 import { GraphQLSchema, GraphQLObjectType } from 'graphql'
-import * as NodeRequest from 'request'
 
 // Imports:
 import { getGraphQLType, getArgs } from './schema_builder'
@@ -111,6 +110,11 @@ export async function createGraphQLSchema(
       ? options.equivalentToMessages
       : true
 
+  options.fetch =
+    typeof options.fetch === 'function'
+      ? options.fetch
+      : await import('cross-fetch').then(m => m.fetch)
+
   options['report'] = {
     warnings: [],
     numOps: 0,
@@ -120,6 +124,11 @@ export async function createGraphQLSchema(
     numMutationsCreated: 0
   }
 
+  options.skipSchemaValidation =
+    typeof options.skipSchemaValidation === 'boolean'
+      ? options.skipSchemaValidation
+      : false
+
   let oass: Oas3[]
 
   if (Array.isArray(spec)) {
@@ -128,7 +137,7 @@ export async function createGraphQLSchema(
      */
     oass = await Promise.all(
       spec.map(ele => {
-        return Oas3Tools.getValidOAS3(ele)
+        return Oas3Tools.getValidOAS3(ele, options)
       })
     )
   } else {
@@ -137,7 +146,7 @@ export async function createGraphQLSchema(
      * If the spec is OAS 2.0, attempt to translate it into 3.0.x, then try to
      * translate the spec into a GraphQL schema
      */
-    oass = [await Oas3Tools.getValidOAS3(spec)]
+    oass = [await Oas3Tools.getValidOAS3(spec, options)]
   }
 
   const { schema, report } = await translateOpenAPIToGraphQL(
@@ -183,7 +192,8 @@ async function translateOpenAPIToGraphQL(
 
     // Logging options
     provideErrorExtensions,
-    equivalentToMessages
+    equivalentToMessages,
+    fetch
   }: InternalOptions
 ): Promise<{ schema: GraphQLSchema; report: Report }> {
   const options = {
@@ -214,7 +224,8 @@ async function translateOpenAPIToGraphQL(
 
     // Logging options
     provideErrorExtensions,
-    equivalentToMessages
+    equivalentToMessages,
+    fetch
   }
   translationLog(`Options: ${JSON.stringify(options)}`)
 
@@ -486,7 +497,7 @@ function getFieldForOperation(
   operation: Operation,
   baseUrl: string,
   data: PreprocessingData,
-  requestOptions: NodeRequest.OptionsWithUrl
+  requestOptions: RequestInit
 ): Field {
   // Create GraphQL Type for response:
   const type = getGraphQLType({
