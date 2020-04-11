@@ -5,6 +5,7 @@
 
 // Type imports:
 import { ResolveFunction, GraphQLOperationType } from './graphql'
+import { ResolverMiddleware } from '../resolver_builder'
 
 /**
  * Type definition of the options that users can pass to OpenAPI-to-GraphQL.
@@ -213,6 +214,11 @@ export type Options = {
    * Custom fetch implementation
    */
   fetch?: typeof import('cross-fetch').fetch
+
+  /**
+   * Middlewares for Resolver Factory
+   */
+  resolverMiddleware?: ResolverMiddleware;
 }
 
 export type InternalOptions = {
@@ -403,6 +409,11 @@ export type InternalOptions = {
    * Custom fetch implementation
    */
   fetch: typeof import('cross-fetch').fetch
+
+  /**
+   * Middlewares for Resolver Factory
+   */
+  resolverMiddleware: ResolverMiddleware;
 }
 
 export type selectQueryOrMutationFieldType = {

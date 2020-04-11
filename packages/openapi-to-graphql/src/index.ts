@@ -115,6 +115,11 @@ export async function createGraphQLSchema (
       ? options.fetch
       : await import('cross-fetch').then(m => m.fetch)
 
+  options.resolverMiddleware =
+    typeof options.resolverMiddleware === 'function'
+      ? options.resolverMiddleware
+      : (resolverFactoryParams, factory) => factory(resolverFactoryParams)
+
   options['report'] = {
     warnings: [],
     numOps: 0,
@@ -184,6 +189,8 @@ async function translateOpenAPIToGraphQL (
     requestOptions,
     baseUrl,
     customResolvers,
+    fetch,
+    resolverMiddleware,
 
     // Authentication options
     viewer,
@@ -192,8 +199,7 @@ async function translateOpenAPIToGraphQL (
 
     // Logging options
     provideErrorExtensions,
-    equivalentToMessages,
-    fetch
+    equivalentToMessages
   }: InternalOptions
 ): Promise<{ schema: GraphQLSchema; report: Report }> {
   const options = {
@@ -216,6 +222,8 @@ async function translateOpenAPIToGraphQL (
     requestOptions,
     baseUrl,
     customResolvers,
+    fetch,
+    resolverMiddleware,
 
     // Authentication options
     viewer,
@@ -224,8 +232,7 @@ async function translateOpenAPIToGraphQL (
 
     // Logging options
     provideErrorExtensions,
-    equivalentToMessages,
-    fetch
+    equivalentToMessages
   }
   translationLog(`Options: ${JSON.stringify(options)}`)
 
@@ -511,13 +518,15 @@ function getFieldForOperation (
     ? operation.payloadDefinition.graphQLInputObjectTypeName
     : null
 
-  const resolve = getResolver({
+  const resolverFactoryParams = {
     operation,
     payloadName: payloadSchemaName,
     data,
     baseUrl,
     requestOptions
-  })
+  }
+
+  const resolve = data.options.resolverMiddleware(resolverFactoryParams, getResolver)
 
   // Create args:
   const args: Args = getArgs({

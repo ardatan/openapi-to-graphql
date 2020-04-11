@@ -538,6 +538,9 @@ function getScalarType ({
     case 'number':
       def.graphQLType = GraphQLFloat
       break
+    case 'float':
+      def.graphQLType = GraphQLFloat
+      break
     case 'boolean':
       def.graphQLType = GraphQLBoolean
       break
